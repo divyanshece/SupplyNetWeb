@@ -25,10 +25,8 @@ import LoadingOverlay from './components/LoadingOverlay'
 import ConfirmDialog from './components/ConfirmDialog'
 import { validateNetwork } from './components/validationService'
 import ValidationPanel from './components/ValidationPanel'
-import AdvancedDemandDialog from './components/AdvancedDemandDialog'
 import ProtectedRoute from './components/ProtectedRoute'
 import SavedNetworksDialog from './components/SavedNetworksDialog'
-import SaveIndicator from './components/SaveIndicator'
 import WorkspaceStats from './components/WorkspaceStats'
 import ScenarioComparison from './components/ScenarioComparison'
 
@@ -36,8 +34,6 @@ import ScenarioComparison from './components/ScenarioComparison'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 
-// Validation
-import { sanitizeNumber, sanitizeInteger } from './components/enhancedValidation'
 
 function MainApp() {
   const navigate = useNavigate()
@@ -102,9 +98,6 @@ function MainApp() {
   // Validation
   const [showValidation, setShowValidation] = useState(false)
   const [validationResults, setValidationResults] = useState(null)
-
-  // Advanced Demand
-  const [showAdvancedDemandDialog, setShowAdvancedDemandDialog] = useState(false)
 
   // Auto-save state
   const [saveStatus, setSaveStatus] = useState('saved')
