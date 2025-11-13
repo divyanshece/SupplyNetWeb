@@ -40,6 +40,11 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import ThemeToggle from './ThemeToggle'
 import SaveIndicator from './SaveIndicator'
+import FactoryIcon from '@mui/icons-material/Factory'
+import CategoryIcon from '@mui/icons-material/Category'
+import InventoryIcon from '@mui/icons-material/Inventory';
+import PersonIcon from '@mui/icons-material/Person';
+import ClearIcon from '@mui/icons-material/Clear';
 
 function ActionToolbar({
   onAddNode,
@@ -117,18 +122,14 @@ function ActionToolbar({
       >
         Build
       </Button>
+      {/* Build Menu */}
       <Menu
         anchorEl={buildMenuAnchor}
         open={Boolean(buildMenuAnchor)}
         onClose={() => setBuildMenuAnchor(null)}
         PaperProps={{
           elevation: 3,
-          sx: {
-            mt: 0.5,
-            borderRadius: 2,
-            border: `1px solid ${theme.palette.divider}`,
-            bgcolor: 'background.paper',
-          },
+          sx: { width: 240, mt: 0.5, borderRadius: 2 },
         }}
       >
         <MenuItem
@@ -138,12 +139,27 @@ function ActionToolbar({
           }}
         >
           <ListItemIcon>
-            <LocalShippingIcon fontSize="small" color="primary" />
+            <LocalShippingIcon fontSize="small" color="success" />
           </ListItemIcon>
           <ListItemText primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 500 }}>
             Add Supplier
           </ListItemText>
         </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            onAddNode('factory')
+            setBuildMenuAnchor(null)
+          }}
+        >
+          <ListItemIcon>
+            <FactoryIcon fontSize="small" sx={{ color: '#f59e0b' }} />
+          </ListItemIcon>
+          <ListItemText primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 500 }}>
+            Add Factory
+          </ListItemText>
+        </MenuItem>
+
         <MenuItem
           onClick={() => {
             onAddNode('distributor')
@@ -151,12 +167,29 @@ function ActionToolbar({
           }}
         >
           <ListItemIcon>
-            <StorefrontIcon fontSize="small" color="primary" />
+            <InventoryIcon fontSize="small" color="primary" />
           </ListItemIcon>
           <ListItemText primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 500 }}>
             Add Distributor
           </ListItemText>
         </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            onAddNode('retailer')
+            setBuildMenuAnchor(null)
+          }}
+        >
+          <ListItemIcon>
+            <StorefrontIcon fontSize="small" sx={{ color: '#8b5cf6' }} />
+          </ListItemIcon>
+          <ListItemText primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 500 }}>
+            Add Retailer
+          </ListItemText>
+        </MenuItem>
+
+        <Divider sx={{ my: 0.5 }} />
+
         <MenuItem
           onClick={() => {
             onAddDemand()
@@ -164,10 +197,28 @@ function ActionToolbar({
           }}
         >
           <ListItemIcon>
-            <ShoppingCartIcon fontSize="small" color="primary" />
+            <PersonIcon fontSize="small" color="secondary" />
           </ListItemIcon>
           <ListItemText primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 500 }}>
-            Add Demand
+            Add Customer Demand
+          </ListItemText>
+        </MenuItem>
+
+        <Divider sx={{ my: 0.5 }} />
+
+        <MenuItem
+          onClick={() => {
+            onClearAll()
+            setBuildMenuAnchor(null)
+          }}
+        >
+          <ListItemIcon>
+            <ClearIcon fontSize="small" color="error" />
+          </ListItemIcon>
+          <ListItemText
+            primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 500, color: 'error.main' }}
+          >
+            Clear All
           </ListItemText>
         </MenuItem>
       </Menu>

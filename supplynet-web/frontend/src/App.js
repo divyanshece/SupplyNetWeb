@@ -72,7 +72,11 @@ function MainApp() {
   const [simulationResults, setSimulationResults] = useState(null)
   const [isSimulating, setIsSimulating] = useState(false)
   const [simTime, setSimTime] = useState(30)
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000'
+  const API_BASE_URL =
+    process.env.REACT_APP_API_URL ||
+    (process.env.NODE_ENV === 'production'
+      ? window.location.origin + '/api'
+      : 'http://localhost:8000')
 
   // Scenarios
   const [scenarios, setScenarios] = useState([])
@@ -366,40 +370,35 @@ function MainApp() {
 
   // Node Functions
   const addNode = type => {
-    const id = `${type}_${Date.now()}`
-    const typeCount = nodes.filter(n => n.data.nodeType === type).length + 1
-    const newNode = {
-      id,
+    const nodeCount = nodes.filter(n => n.data.nodeType === type).length + 1
+    const typeLabel = type.charAt(0).toUpperCase() + type.slice(1)
+
+    // Base node configuration
+    const baseNode = {
+      id: `${type}_${Date.now()}`,
       type: 'default',
       data: {
-        label: `${type.charAt(0).toUpperCase() + type.slice(1)} ${typeCount}`,
+        label: `${typeLabel} ${nodeCount}`,
         nodeType: type,
-        capacity: 1000,
-        initial_level: 1000,
-        holding_cost: 0.22,
-        replenishment_policy: 'SS',
-        policy_s: 400,
-        policy_S: 1000,
-        policy_R: 1000,
-        policy_Q: 500,
-        buy_price: 150,
-        sell_price: 300,
       },
-      position: {
-        x: 150 + nodes.length * 50,
-        y: 150 + (nodes.length % 3) * 100,
-      },
-      style: {
-        background:
-          type === 'supplier'
-            ? themeMode === 'light'
-              ? '#10b981'
-              : '#34d399'
-            : themeMode === 'light'
-            ? '#3b82f6'
-            : '#60a5fa',
+      position: { x: 250 + Math.random() * 100, y: 250 + Math.random() * 100 },
+    }
+
+    // Add type-specific defaults
+    if (type === 'supplier') {
+      baseNode.data = {
+        ...baseNode.data,
+        supplier_type: 'infinite', // 'infinite' or 'finite'
+        capacity: 10000,
+        initial_level: 10000,
+        holding_cost: 0.01,
+        // Raw material will be added via config panel
+        raw_material: null,
+      }
+      baseNode.style = {
+        background: themeMode === 'light' ? '#10b981' : '#34d399',
         color: 'white',
-        border: themeMode === 'light' ? '2px solid #1a1d29' : '2px solid #374151',
+        border: themeMode === 'light' ? '2px solid #059669' : '2px solid #10b981',
         borderRadius: '10px',
         padding: '12px',
         width: 160,
@@ -407,12 +406,97 @@ function MainApp() {
         fontWeight: '600',
         boxShadow:
           themeMode === 'light' ? '0 4px 6px rgba(0, 0, 0, 0.1)' : '0 4px 6px rgba(0, 0, 0, 0.3)',
-      },
+      }
+    } else if (type === 'factory') {
+      baseNode.data = {
+        ...baseNode.data,
+        capacity: 2500,
+        initial_level: 2500,
+        holding_cost: 0.02,
+        replenishment_policy: 'SS',
+        policy_s: 1000,
+        policy_S: 2500,
+        policy_R: 7,
+        policy_Q: 1500,
+        sell_price: 30,
+        // Product will be created via config panel
+        product: null,
+        manufacturing_cost: 20,
+        manufacturing_time: 1,
+        batch_size: 1000,
+      }
+      baseNode.style = {
+        background: themeMode === 'light' ? '#f59e0b' : '#fbbf24',
+        color: 'white',
+        border: themeMode === 'light' ? '2px solid #d97706' : '2px solid #f59e0b',
+        borderRadius: '10px',
+        padding: '12px',
+        width: 160,
+        fontSize: '13px',
+        fontWeight: '600',
+        boxShadow:
+          themeMode === 'light' ? '0 4px 6px rgba(0, 0, 0, 0.1)' : '0 4px 6px rgba(0, 0, 0, 0.3)',
+      }
+    } else if (type === 'distributor') {
+      baseNode.data = {
+        ...baseNode.data,
+        capacity: 1000,
+        initial_level: 1000,
+        holding_cost: 0.22,
+        replenishment_policy: 'SS',
+        policy_s: 400,
+        policy_S: 1000,
+        policy_R: 7,
+        policy_Q: 500,
+        buy_price: 150,
+        sell_price: 300,
+      }
+      baseNode.style = {
+        background: themeMode === 'light' ? '#3b82f6' : '#60a5fa',
+        color: 'white',
+        border: themeMode === 'light' ? '2px solid #2563eb' : '2px solid #3b82f6',
+        borderRadius: '10px',
+        padding: '12px',
+        width: 160,
+        fontSize: '13px',
+        fontWeight: '600',
+        boxShadow:
+          themeMode === 'light' ? '0 4px 6px rgba(0, 0, 0, 0.1)' : '0 4px 6px rgba(0, 0, 0, 0.3)',
+      }
+    } else if (type === 'retailer') {
+      baseNode.data = {
+        ...baseNode.data,
+        capacity: 500,
+        initial_level: 500,
+        holding_cost: 0.25,
+        replenishment_policy: 'SS',
+        policy_s: 200,
+        policy_S: 500,
+        policy_R: 5,
+        policy_Q: 300,
+        buy_price: 300,
+        sell_price: 400,
+      }
+      baseNode.style = {
+        background: themeMode === 'light' ? '#8b5cf6' : '#a78bfa',
+        color: 'white',
+        border: themeMode === 'light' ? '2px solid #7c3aed' : '2px solid #8b5cf6',
+        borderRadius: '10px',
+        padding: '12px',
+        width: 160,
+        fontSize: '13px',
+        fontWeight: '600',
+        boxShadow:
+          themeMode === 'light' ? '0 4px 6px rgba(0, 0, 0, 0.1)' : '0 4px 6px rgba(0, 0, 0, 0.3)',
+      }
     }
-    setNodes(nds => [...nds, newNode])
+
+    setNodes([...nodes, baseNode])
+    setSaveStatus('unsaved')
+
     setSnackbar({
       open: true,
-      message: `${type.charAt(0).toUpperCase() + type.slice(1)} ${typeCount} added!`,
+      message: `${typeLabel} added to network`,
       severity: 'success',
     })
   }

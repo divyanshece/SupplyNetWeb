@@ -49,7 +49,14 @@ function ConfigPanel({
 
   if (!selectedNode && !selectedEdge && demands.length === 0) {
     return (
-      <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.default' }}>
+      <Box
+        sx={{
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          bgcolor: 'background.default',
+        }}
+      >
         {/* Network Header - Always Show */}
         <Box
           sx={{
@@ -109,7 +116,14 @@ function ConfigPanel({
   }
 
   return (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.default' }}>
+    <Box
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        bgcolor: 'background.default',
+      }}
+    >
       {/* Network Header */}
       <Box
         sx={{
@@ -178,14 +192,14 @@ function ConfigPanel({
                 type="number"
                 value={selectedEdge.data?.cost ?? ''}
                 onChange={e => {
-                  const val = e.target.value;
+                  const val = e.target.value
                   if (val !== '') {
-                    updateEdgeData(selectedEdge.id, { cost: parseFloat(val) || 0 });
+                    updateEdgeData(selectedEdge.id, { cost: parseFloat(val) || 0 })
                   }
                 }}
                 onBlur={e => {
                   if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
-                    updateEdgeData(selectedEdge.id, { cost: 10 });
+                    updateEdgeData(selectedEdge.id, { cost: 10 })
                   }
                 }}
                 fullWidth
@@ -199,14 +213,14 @@ function ConfigPanel({
                 type="number"
                 value={selectedEdge.data?.lead_time ?? ''}
                 onChange={e => {
-                  const val = e.target.value;
+                  const val = e.target.value
                   if (val !== '') {
-                    updateEdgeData(selectedEdge.id, { lead_time: parseFloat(val) || 0 });
+                    updateEdgeData(selectedEdge.id, { lead_time: parseFloat(val) || 0 })
                   }
                 }}
                 onBlur={e => {
                   if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
-                    updateEdgeData(selectedEdge.id, { lead_time: 5 });
+                    updateEdgeData(selectedEdge.id, { lead_time: 5 })
                   }
                 }}
                 fullWidth
@@ -276,14 +290,14 @@ function ConfigPanel({
                     type="number"
                     value={selectedNode.data.capacity ?? ''}
                     onChange={e => {
-                      const val = e.target.value;
+                      const val = e.target.value
                       if (val !== '') {
-                        updateNodeData(selectedNode.id, { capacity: parseInt(val) || 0 });
+                        updateNodeData(selectedNode.id, { capacity: parseInt(val) || 0 })
                       }
                     }}
                     onBlur={e => {
                       if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
-                        updateNodeData(selectedNode.id, { capacity: 1000 });
+                        updateNodeData(selectedNode.id, { capacity: 1000 })
                       }
                     }}
                     fullWidth
@@ -297,14 +311,14 @@ function ConfigPanel({
                     type="number"
                     value={selectedNode.data.initial_level ?? ''}
                     onChange={e => {
-                      const val = e.target.value;
+                      const val = e.target.value
                       if (val !== '') {
-                        updateNodeData(selectedNode.id, { initial_level: parseInt(val) || 0 });
+                        updateNodeData(selectedNode.id, { initial_level: parseInt(val) || 0 })
                       }
                     }}
                     onBlur={e => {
                       if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
-                        updateNodeData(selectedNode.id, { initial_level: 1000 });
+                        updateNodeData(selectedNode.id, { initial_level: 1000 })
                       }
                     }}
                     fullWidth
@@ -320,14 +334,14 @@ function ConfigPanel({
                   type="number"
                   value={selectedNode.data.holding_cost ?? ''}
                   onChange={e => {
-                    const val = e.target.value;
+                    const val = e.target.value
                     if (val !== '') {
-                      updateNodeData(selectedNode.id, { holding_cost: parseFloat(val) || 0 });
+                      updateNodeData(selectedNode.id, { holding_cost: parseFloat(val) || 0 })
                     }
                   }}
                   onBlur={e => {
                     if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
-                      updateNodeData(selectedNode.id, { holding_cost: 0.22 });
+                      updateNodeData(selectedNode.id, { holding_cost: 0.22 })
                     }
                   }}
                   fullWidth
@@ -366,14 +380,14 @@ function ConfigPanel({
                       type="number"
                       value={selectedNode.data.policy_s ?? ''}
                       onChange={e => {
-                        const val = e.target.value;
+                        const val = e.target.value
                         if (val !== '') {
-                          updateNodeData(selectedNode.id, { policy_s: parseInt(val) || 0 });
+                          updateNodeData(selectedNode.id, { policy_s: parseInt(val) || 0 })
                         }
                       }}
                       onBlur={e => {
                         if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
-                          updateNodeData(selectedNode.id, { policy_s: 400 });
+                          updateNodeData(selectedNode.id, { policy_s: 400 })
                         }
                       }}
                       fullWidth
@@ -387,14 +401,14 @@ function ConfigPanel({
                       type="number"
                       value={selectedNode.data.policy_S ?? ''}
                       onChange={e => {
-                        const val = e.target.value;
+                        const val = e.target.value
                         if (val !== '') {
-                          updateNodeData(selectedNode.id, { policy_S: parseInt(val) || 0 });
+                          updateNodeData(selectedNode.id, { policy_S: parseInt(val) || 0 })
                         }
                       }}
                       onBlur={e => {
                         if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
-                          updateNodeData(selectedNode.id, { policy_S: 1000 });
+                          updateNodeData(selectedNode.id, { policy_S: 1000 })
                         }
                       }}
                       fullWidth
@@ -411,14 +425,14 @@ function ConfigPanel({
                       type="number"
                       value={selectedNode.data.policy_R ?? ''}
                       onChange={e => {
-                        const val = e.target.value;
+                        const val = e.target.value
                         if (val !== '') {
-                          updateNodeData(selectedNode.id, { policy_R: parseInt(val) || 0 });
+                          updateNodeData(selectedNode.id, { policy_R: parseInt(val) || 0 })
                         }
                       }}
                       onBlur={e => {
                         if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
-                          updateNodeData(selectedNode.id, { policy_R: 1000 });
+                          updateNodeData(selectedNode.id, { policy_R: 1000 })
                         }
                       }}
                       fullWidth
@@ -432,14 +446,14 @@ function ConfigPanel({
                       type="number"
                       value={selectedNode.data.policy_Q ?? ''}
                       onChange={e => {
-                        const val = e.target.value;
+                        const val = e.target.value
                         if (val !== '') {
-                          updateNodeData(selectedNode.id, { policy_Q: parseInt(val) || 0 });
+                          updateNodeData(selectedNode.id, { policy_Q: parseInt(val) || 0 })
                         }
                       }}
                       onBlur={e => {
                         if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
-                          updateNodeData(selectedNode.id, { policy_Q: 500 });
+                          updateNodeData(selectedNode.id, { policy_Q: 500 })
                         }
                       }}
                       fullWidth
@@ -465,14 +479,14 @@ function ConfigPanel({
                     type="number"
                     value={selectedNode.data.buy_price ?? ''}
                     onChange={e => {
-                      const val = e.target.value;
+                      const val = e.target.value
                       if (val !== '') {
-                        updateNodeData(selectedNode.id, { buy_price: parseFloat(val) || 0 });
+                        updateNodeData(selectedNode.id, { buy_price: parseFloat(val) || 0 })
                       }
                     }}
                     onBlur={e => {
                       if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
-                        updateNodeData(selectedNode.id, { buy_price: 150 });
+                        updateNodeData(selectedNode.id, { buy_price: 150 })
                       }
                     }}
                     fullWidth
@@ -485,14 +499,14 @@ function ConfigPanel({
                     type="number"
                     value={selectedNode.data.sell_price ?? ''}
                     onChange={e => {
-                      const val = e.target.value;
+                      const val = e.target.value
                       if (val !== '') {
-                        updateNodeData(selectedNode.id, { sell_price: parseFloat(val) || 0 });
+                        updateNodeData(selectedNode.id, { sell_price: parseFloat(val) || 0 })
                       }
                     }}
                     onBlur={e => {
                       if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
-                        updateNodeData(selectedNode.id, { sell_price: 300 });
+                        updateNodeData(selectedNode.id, { sell_price: 300 })
                       }
                     }}
                     fullWidth
@@ -503,6 +517,639 @@ function ConfigPanel({
                 </Stack>
               </>
             )}
+            {/* Factory Configuration */}
+            {selectedNode.data.nodeType === 'factory' && (
+              <>
+                <Divider sx={{ my: 2 }} />
+                <Typography
+                  variant="caption"
+                  sx={{ color: '#666', fontWeight: 600, display: 'block', mb: 1.5 }}
+                >
+                  FACTORY SETTINGS
+                </Typography>
+
+                <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                  <TextField
+                    label="Capacity (units)"
+                    type="number"
+                    value={selectedNode.data.capacity ?? ''}
+                    onChange={e => {
+                      const val = e.target.value
+                      if (val !== '') {
+                        updateNodeData(selectedNode.id, { capacity: parseInt(val) || 0 })
+                      }
+                    }}
+                    onBlur={e => {
+                      if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                        updateNodeData(selectedNode.id, { capacity: 2500 })
+                      }
+                    }}
+                    fullWidth
+                    size="small"
+                    helperText="Max storage"
+                    InputLabelProps={{ shrink: true }}
+                    inputProps={{ min: 0 }}
+                  />
+                  <TextField
+                    label="Initial Level (units)"
+                    type="number"
+                    value={selectedNode.data.initial_level ?? ''}
+                    onChange={e => {
+                      const val = e.target.value
+                      if (val !== '') {
+                        updateNodeData(selectedNode.id, { initial_level: parseInt(val) || 0 })
+                      }
+                    }}
+                    onBlur={e => {
+                      if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                        updateNodeData(selectedNode.id, { initial_level: 2500 })
+                      }
+                    }}
+                    fullWidth
+                    size="small"
+                    helperText="Starting inventory"
+                    InputLabelProps={{ shrink: true }}
+                    inputProps={{ min: 0 }}
+                  />
+                </Stack>
+
+                <TextField
+                  label="Holding Cost ($/unit/day)"
+                  type="number"
+                  value={selectedNode.data.holding_cost ?? ''}
+                  onChange={e => {
+                    const val = e.target.value
+                    if (val !== '') {
+                      updateNodeData(selectedNode.id, { holding_cost: parseFloat(val) || 0 })
+                    }
+                  }}
+                  onBlur={e => {
+                    if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
+                      updateNodeData(selectedNode.id, { holding_cost: 0.02 })
+                    }
+                  }}
+                  fullWidth
+                  size="small"
+                  inputProps={{ step: '0.01', min: 0 }}
+                  sx={{ mb: 2 }}
+                  InputLabelProps={{ shrink: true }}
+                />
+
+                <Divider sx={{ my: 2 }} />
+                <Typography
+                  variant="caption"
+                  sx={{ color: '#666', fontWeight: 600, display: 'block', mb: 1.5 }}
+                >
+                  PRODUCTION SETTINGS
+                </Typography>
+
+                <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                  <TextField
+                    label="Manufacturing Cost ($)"
+                    type="number"
+                    value={selectedNode.data.manufacturing_cost ?? ''}
+                    onChange={e => {
+                      const val = e.target.value
+                      if (val !== '') {
+                        updateNodeData(selectedNode.id, {
+                          manufacturing_cost: parseFloat(val) || 0,
+                        })
+                      }
+                    }}
+                    onBlur={e => {
+                      if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
+                        updateNodeData(selectedNode.id, { manufacturing_cost: 20 })
+                      }
+                    }}
+                    fullWidth
+                    size="small"
+                    InputLabelProps={{ shrink: true }}
+                    inputProps={{ step: '0.01', min: 0 }}
+                  />
+                  <TextField
+                    label="Manufacturing Time (days)"
+                    type="number"
+                    value={selectedNode.data.manufacturing_time ?? ''}
+                    onChange={e => {
+                      const val = e.target.value
+                      if (val !== '') {
+                        updateNodeData(selectedNode.id, {
+                          manufacturing_time: parseFloat(val) || 0,
+                        })
+                      }
+                    }}
+                    onBlur={e => {
+                      if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
+                        updateNodeData(selectedNode.id, { manufacturing_time: 1 })
+                      }
+                    }}
+                    fullWidth
+                    size="small"
+                    InputLabelProps={{ shrink: true }}
+                    inputProps={{ step: '0.1', min: 0 }}
+                  />
+                </Stack>
+
+                <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                  <TextField
+                    label="Batch Size (units)"
+                    type="number"
+                    value={selectedNode.data.batch_size ?? ''}
+                    onChange={e => {
+                      const val = e.target.value
+                      if (val !== '') {
+                        updateNodeData(selectedNode.id, { batch_size: parseInt(val) || 0 })
+                      }
+                    }}
+                    onBlur={e => {
+                      if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                        updateNodeData(selectedNode.id, { batch_size: 1000 })
+                      }
+                    }}
+                    fullWidth
+                    size="small"
+                    helperText="Units per batch"
+                    InputLabelProps={{ shrink: true }}
+                    inputProps={{ min: 0 }}
+                  />
+                  <TextField
+                    label="Sell Price ($)"
+                    type="number"
+                    value={selectedNode.data.sell_price ?? ''}
+                    onChange={e => {
+                      const val = e.target.value
+                      if (val !== '') {
+                        updateNodeData(selectedNode.id, { sell_price: parseFloat(val) || 0 })
+                      }
+                    }}
+                    onBlur={e => {
+                      if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
+                        updateNodeData(selectedNode.id, { sell_price: 30 })
+                      }
+                    }}
+                    fullWidth
+                    size="small"
+                    InputLabelProps={{ shrink: true }}
+                    inputProps={{ step: '0.01', min: 0 }}
+                  />
+                </Stack>
+
+                <Divider sx={{ my: 2 }} />
+                <Typography
+                  variant="caption"
+                  sx={{ color: '#666', fontWeight: 600, display: 'block', mb: 1.5 }}
+                >
+                  REPLENISHMENT POLICY
+                </Typography>
+
+                <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+                  <InputLabel>Policy Type</InputLabel>
+                  <Select
+                    value={selectedNode.data.replenishment_policy ?? 'SS'}
+                    label="Policy Type"
+                    onChange={e =>
+                      updateNodeData(selectedNode.id, { replenishment_policy: e.target.value })
+                    }
+                  >
+                    <MenuItem value="SS">(s, S) - Continuous Review</MenuItem>
+                    <MenuItem value="RQ">(R, Q) - Periodic Review</MenuItem>
+                  </Select>
+                </FormControl>
+
+                {(selectedNode.data.replenishment_policy ?? 'SS') === 'SS' ? (
+                  <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                    <TextField
+                      label="s - Reorder Point"
+                      type="number"
+                      value={selectedNode.data.policy_s ?? ''}
+                      onChange={e => {
+                        const val = e.target.value
+                        if (val !== '') {
+                          updateNodeData(selectedNode.id, { policy_s: parseInt(val) || 0 })
+                        }
+                      }}
+                      onBlur={e => {
+                        if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                          updateNodeData(selectedNode.id, { policy_s: 1000 })
+                        }
+                      }}
+                      fullWidth
+                      size="small"
+                      helperText="When to order"
+                      InputLabelProps={{ shrink: true }}
+                      inputProps={{ min: 0 }}
+                    />
+                    <TextField
+                      label="S - Order-up-to Level"
+                      type="number"
+                      value={selectedNode.data.policy_S ?? ''}
+                      onChange={e => {
+                        const val = e.target.value
+                        if (val !== '') {
+                          updateNodeData(selectedNode.id, { policy_S: parseInt(val) || 0 })
+                        }
+                      }}
+                      onBlur={e => {
+                        if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                          updateNodeData(selectedNode.id, { policy_S: 2500 })
+                        }
+                      }}
+                      fullWidth
+                      size="small"
+                      helperText="Target level"
+                      InputLabelProps={{ shrink: true }}
+                      inputProps={{ min: 0 }}
+                    />
+                  </Stack>
+                ) : (
+                  <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                    <TextField
+                      label="R - Review Period"
+                      type="number"
+                      value={selectedNode.data.policy_R ?? ''}
+                      onChange={e => {
+                        const val = e.target.value
+                        if (val !== '') {
+                          updateNodeData(selectedNode.id, { policy_R: parseInt(val) || 0 })
+                        }
+                      }}
+                      onBlur={e => {
+                        if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                          updateNodeData(selectedNode.id, { policy_R: 7 })
+                        }
+                      }}
+                      fullWidth
+                      size="small"
+                      helperText="Days between orders"
+                      InputLabelProps={{ shrink: true }}
+                      inputProps={{ min: 0 }}
+                    />
+                    <TextField
+                      label="Q - Order Quantity"
+                      type="number"
+                      value={selectedNode.data.policy_Q ?? ''}
+                      onChange={e => {
+                        const val = e.target.value
+                        if (val !== '') {
+                          updateNodeData(selectedNode.id, { policy_Q: parseInt(val) || 0 })
+                        }
+                      }}
+                      onBlur={e => {
+                        if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                          updateNodeData(selectedNode.id, { policy_Q: 1500 })
+                        }
+                      }}
+                      fullWidth
+                      size="small"
+                      helperText="Fixed order qty"
+                      InputLabelProps={{ shrink: true }}
+                      inputProps={{ min: 0 }}
+                    />
+                  </Stack>
+                )}
+              </>
+            )}
+
+            {/* Retailer Configuration */}
+            {selectedNode.data.nodeType === 'retailer' && (
+              <>
+                <Divider sx={{ my: 2 }} />
+                <Typography
+                  variant="caption"
+                  sx={{ color: '#666', fontWeight: 600, display: 'block', mb: 1.5 }}
+                >
+                  RETAILER SETTINGS
+                </Typography>
+
+                <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                  <TextField
+                    label="Shelf Capacity (units)"
+                    type="number"
+                    value={selectedNode.data.capacity ?? ''}
+                    onChange={e => {
+                      const val = e.target.value
+                      if (val !== '') {
+                        updateNodeData(selectedNode.id, { capacity: parseInt(val) || 0 })
+                      }
+                    }}
+                    onBlur={e => {
+                      if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                        updateNodeData(selectedNode.id, { capacity: 500 })
+                      }
+                    }}
+                    fullWidth
+                    size="small"
+                    helperText="Max shelf space"
+                    InputLabelProps={{ shrink: true }}
+                    inputProps={{ min: 0 }}
+                  />
+                  <TextField
+                    label="Initial Stock (units)"
+                    type="number"
+                    value={selectedNode.data.initial_level ?? ''}
+                    onChange={e => {
+                      const val = e.target.value
+                      if (val !== '') {
+                        updateNodeData(selectedNode.id, { initial_level: parseInt(val) || 0 })
+                      }
+                    }}
+                    onBlur={e => {
+                      if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                        updateNodeData(selectedNode.id, { initial_level: 500 })
+                      }
+                    }}
+                    fullWidth
+                    size="small"
+                    helperText="Starting stock"
+                    InputLabelProps={{ shrink: true }}
+                    inputProps={{ min: 0 }}
+                  />
+                </Stack>
+
+                <TextField
+                  label="Holding Cost ($/unit/day)"
+                  type="number"
+                  value={selectedNode.data.holding_cost ?? ''}
+                  onChange={e => {
+                    const val = e.target.value
+                    if (val !== '') {
+                      updateNodeData(selectedNode.id, { holding_cost: parseFloat(val) || 0 })
+                    }
+                  }}
+                  onBlur={e => {
+                    if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
+                      updateNodeData(selectedNode.id, { holding_cost: 0.25 })
+                    }
+                  }}
+                  fullWidth
+                  size="small"
+                  inputProps={{ step: '0.01', min: 0 }}
+                  sx={{ mb: 2 }}
+                  InputLabelProps={{ shrink: true }}
+                />
+
+                <Divider sx={{ my: 2 }} />
+                <Typography
+                  variant="caption"
+                  sx={{ color: '#666', fontWeight: 600, display: 'block', mb: 1.5 }}
+                >
+                  REPLENISHMENT POLICY
+                </Typography>
+
+                <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+                  <InputLabel>Policy Type</InputLabel>
+                  <Select
+                    value={selectedNode.data.replenishment_policy ?? 'SS'}
+                    label="Policy Type"
+                    onChange={e =>
+                      updateNodeData(selectedNode.id, { replenishment_policy: e.target.value })
+                    }
+                  >
+                    <MenuItem value="SS">(s, S) - Continuous Review</MenuItem>
+                    <MenuItem value="RQ">(R, Q) - Periodic Review</MenuItem>
+                  </Select>
+                </FormControl>
+
+                {(selectedNode.data.replenishment_policy ?? 'SS') === 'SS' ? (
+                  <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                    <TextField
+                      label="s - Reorder Point"
+                      type="number"
+                      value={selectedNode.data.policy_s ?? ''}
+                      onChange={e => {
+                        const val = e.target.value
+                        if (val !== '') {
+                          updateNodeData(selectedNode.id, { policy_s: parseInt(val) || 0 })
+                        }
+                      }}
+                      onBlur={e => {
+                        if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                          updateNodeData(selectedNode.id, { policy_s: 200 })
+                        }
+                      }}
+                      fullWidth
+                      size="small"
+                      helperText="When to order"
+                      InputLabelProps={{ shrink: true }}
+                      inputProps={{ min: 0 }}
+                    />
+                    <TextField
+                      label="S - Order-up-to Level"
+                      type="number"
+                      value={selectedNode.data.policy_S ?? ''}
+                      onChange={e => {
+                        const val = e.target.value
+                        if (val !== '') {
+                          updateNodeData(selectedNode.id, { policy_S: parseInt(val) || 0 })
+                        }
+                      }}
+                      onBlur={e => {
+                        if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                          updateNodeData(selectedNode.id, { policy_S: 500 })
+                        }
+                      }}
+                      fullWidth
+                      size="small"
+                      helperText="Target level"
+                      InputLabelProps={{ shrink: true }}
+                      inputProps={{ min: 0 }}
+                    />
+                  </Stack>
+                ) : (
+                  <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                    <TextField
+                      label="R - Review Period"
+                      type="number"
+                      value={selectedNode.data.policy_R ?? ''}
+                      onChange={e => {
+                        const val = e.target.value
+                        if (val !== '') {
+                          updateNodeData(selectedNode.id, { policy_R: parseInt(val) || 0 })
+                        }
+                      }}
+                      onBlur={e => {
+                        if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                          updateNodeData(selectedNode.id, { policy_R: 5 })
+                        }
+                      }}
+                      fullWidth
+                      size="small"
+                      helperText="Days between orders"
+                      InputLabelProps={{ shrink: true }}
+                      inputProps={{ min: 0 }}
+                    />
+                    <TextField
+                      label="Q - Order Quantity"
+                      type="number"
+                      value={selectedNode.data.policy_Q ?? ''}
+                      onChange={e => {
+                        const val = e.target.value
+                        if (val !== '') {
+                          updateNodeData(selectedNode.id, { policy_Q: parseInt(val) || 0 })
+                        }
+                      }}
+                      onBlur={e => {
+                        if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                          updateNodeData(selectedNode.id, { policy_Q: 300 })
+                        }
+                      }}
+                      fullWidth
+                      size="small"
+                      helperText="Fixed order qty"
+                      InputLabelProps={{ shrink: true }}
+                      inputProps={{ min: 0 }}
+                    />
+                  </Stack>
+                )}
+
+                <Divider sx={{ my: 2 }} />
+                <Typography
+                  variant="caption"
+                  sx={{ color: '#666', fontWeight: 600, display: 'block', mb: 1.5 }}
+                >
+                  PRICING
+                </Typography>
+
+                <Stack direction="row" spacing={2}>
+                  <TextField
+                    label="Buy Price ($)"
+                    type="number"
+                    value={selectedNode.data.buy_price ?? ''}
+                    onChange={e => {
+                      const val = e.target.value
+                      if (val !== '') {
+                        updateNodeData(selectedNode.id, { buy_price: parseFloat(val) || 0 })
+                      }
+                    }}
+                    onBlur={e => {
+                      if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
+                        updateNodeData(selectedNode.id, { buy_price: 300 })
+                      }
+                    }}
+                    fullWidth
+                    size="small"
+                    inputProps={{ step: '0.01', min: 0 }}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                  <TextField
+                    label="Sell Price ($)"
+                    type="number"
+                    value={selectedNode.data.sell_price ?? ''}
+                    onChange={e => {
+                      const val = e.target.value
+                      if (val !== '') {
+                        updateNodeData(selectedNode.id, { sell_price: parseFloat(val) || 0 })
+                      }
+                    }}
+                    onBlur={e => {
+                      if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
+                        updateNodeData(selectedNode.id, { sell_price: 400 })
+                      }
+                    }}
+                    fullWidth
+                    size="small"
+                    inputProps={{ step: '0.01', min: 0 }}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Stack>
+              </>
+            )}
+
+            {/* Supplier Configuration - Add option for finite/infinite */}
+            {selectedNode.data.nodeType === 'supplier' && (
+              <>
+                <Divider sx={{ my: 2 }} />
+                <Typography
+                  variant="caption"
+                  sx={{ color: '#666', fontWeight: 600, display: 'block', mb: 1.5 }}
+                >
+                  SUPPLIER TYPE
+                </Typography>
+
+                <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+                  <InputLabel>Supplier Type</InputLabel>
+                  <Select
+                    value={selectedNode.data.supplier_type ?? 'infinite'}
+                    label="Supplier Type"
+                    onChange={e =>
+                      updateNodeData(selectedNode.id, { supplier_type: e.target.value })
+                    }
+                  >
+                    <MenuItem value="infinite">Infinite Capacity</MenuItem>
+                    <MenuItem value="finite">Finite Capacity</MenuItem>
+                  </Select>
+                </FormControl>
+
+                {selectedNode.data.supplier_type === 'finite' && (
+                  <>
+                    <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                      <TextField
+                        label="Capacity (units)"
+                        type="number"
+                        value={selectedNode.data.capacity ?? ''}
+                        onChange={e => {
+                          const val = e.target.value
+                          if (val !== '') {
+                            updateNodeData(selectedNode.id, { capacity: parseInt(val) || 0 })
+                          }
+                        }}
+                        onBlur={e => {
+                          if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                            updateNodeData(selectedNode.id, { capacity: 10000 })
+                          }
+                        }}
+                        fullWidth
+                        size="small"
+                        InputLabelProps={{ shrink: true }}
+                        inputProps={{ min: 0 }}
+                      />
+                      <TextField
+                        label="Initial Level (units)"
+                        type="number"
+                        value={selectedNode.data.initial_level ?? ''}
+                        onChange={e => {
+                          const val = e.target.value
+                          if (val !== '') {
+                            updateNodeData(selectedNode.id, { initial_level: parseInt(val) || 0 })
+                          }
+                        }}
+                        onBlur={e => {
+                          if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                            updateNodeData(selectedNode.id, { initial_level: 10000 })
+                          }
+                        }}
+                        fullWidth
+                        size="small"
+                        InputLabelProps={{ shrink: true }}
+                        inputProps={{ min: 0 }}
+                      />
+                    </Stack>
+
+                    <TextField
+                      label="Holding Cost ($/unit/day)"
+                      type="number"
+                      value={selectedNode.data.holding_cost ?? ''}
+                      onChange={e => {
+                        const val = e.target.value
+                        if (val !== '') {
+                          updateNodeData(selectedNode.id, { holding_cost: parseFloat(val) || 0 })
+                        }
+                      }}
+                      onBlur={e => {
+                        if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
+                          updateNodeData(selectedNode.id, { holding_cost: 0.01 })
+                        }
+                      }}
+                      fullWidth
+                      size="small"
+                      inputProps={{ step: '0.01', min: 0 }}
+                      sx={{ mb: 2 }}
+                      InputLabelProps={{ shrink: true }}
+                    />
+                  </>
+                )}
+              </>
+            )}
           </Paper>
         )}
 
@@ -511,7 +1158,13 @@ function ConfigPanel({
           <>
             <Typography
               variant="subtitle1"
-              sx={{ fontWeight: 700, mb: 2, display: 'flex', alignItems: 'center', color: '#1976d2' }}
+              sx={{
+                fontWeight: 700,
+                mb: 2,
+                display: 'flex',
+                alignItems: 'center',
+                color: '#1976d2',
+              }}
             >
               <LocalShippingIcon sx={{ mr: 1, fontSize: 22 }} />
               Customer Demands ({demands.length})
@@ -553,14 +1206,14 @@ function ConfigPanel({
                     type="number"
                     value={demand.arrival_interval ?? ''}
                     onChange={e => {
-                      const val = e.target.value;
+                      const val = e.target.value
                       if (val !== '') {
-                        updateDemand(demand.id, { arrival_interval: parseFloat(val) || 0 });
+                        updateDemand(demand.id, { arrival_interval: parseFloat(val) || 0 })
                       }
                     }}
                     onBlur={e => {
                       if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
-                        updateDemand(demand.id, { arrival_interval: 1 });
+                        updateDemand(demand.id, { arrival_interval: 1 })
                       }
                     }}
                     fullWidth
@@ -574,14 +1227,14 @@ function ConfigPanel({
                     type="number"
                     value={demand.order_quantity ?? ''}
                     onChange={e => {
-                      const val = e.target.value;
+                      const val = e.target.value
                       if (val !== '') {
-                        updateDemand(demand.id, { order_quantity: parseInt(val) || 0 });
+                        updateDemand(demand.id, { order_quantity: parseInt(val) || 0 })
                       }
                     }}
                     onBlur={e => {
                       if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
-                        updateDemand(demand.id, { order_quantity: 400 });
+                        updateDemand(demand.id, { order_quantity: 400 })
                       }
                     }}
                     fullWidth
@@ -598,14 +1251,14 @@ function ConfigPanel({
                     type="number"
                     value={demand.delivery_cost ?? ''}
                     onChange={e => {
-                      const val = e.target.value;
+                      const val = e.target.value
                       if (val !== '') {
-                        updateDemand(demand.id, { delivery_cost: parseFloat(val) || 0 });
+                        updateDemand(demand.id, { delivery_cost: parseFloat(val) || 0 })
                       }
                     }}
                     onBlur={e => {
                       if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
-                        updateDemand(demand.id, { delivery_cost: 10 });
+                        updateDemand(demand.id, { delivery_cost: 10 })
                       }
                     }}
                     fullWidth
@@ -618,14 +1271,14 @@ function ConfigPanel({
                     type="number"
                     value={demand.lead_time ?? ''}
                     onChange={e => {
-                      const val = e.target.value;
+                      const val = e.target.value
                       if (val !== '') {
-                        updateDemand(demand.id, { lead_time: parseFloat(val) || 0 });
+                        updateDemand(demand.id, { lead_time: parseFloat(val) || 0 })
                       }
                     }}
                     onBlur={e => {
                       if (e.target.value === '' || isNaN(parseFloat(e.target.value))) {
-                        updateDemand(demand.id, { lead_time: 5 });
+                        updateDemand(demand.id, { lead_time: 5 })
                       }
                     }}
                     fullWidth
