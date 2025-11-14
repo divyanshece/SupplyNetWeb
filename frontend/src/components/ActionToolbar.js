@@ -15,6 +15,7 @@ import {
   Stack,
   useTheme,
 } from '@mui/material'
+import { Help as HelpIcon, Description as DocsIcon } from '@mui/icons-material'
 import { AccountTree as NetworkIcon } from '@mui/icons-material'
 import AddIcon from '@mui/icons-material/Add'
 import StorefrontIcon from '@mui/icons-material/Storefront'
@@ -42,6 +43,7 @@ import InventoryIcon from '@mui/icons-material/Inventory'
 import PersonIcon from '@mui/icons-material/Person'
 import ClearIcon from '@mui/icons-material/Clear'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
 
 function ActionToolbar({
   onAddNode,
@@ -74,6 +76,30 @@ function ActionToolbar({
   const [userMenuAnchor, setUserMenuAnchor] = React.useState(null)
   const [helpMenuAnchor, setHelpMenuAnchor] = React.useState(null)
   const navigate = useNavigate()
+  const { signOut } = useAuth()
+
+  const handleLogout = async () => {
+    try {
+      await signOut()
+      window.location.href = '/'
+    } catch (error) {
+      console.error('Logout error:', error)
+      window.location.href = '/'
+    }
+  }
+
+  const handleHelp = () => {
+    window.open('https://supplychainsimulation.github.io/SupplyNetPy/', '_blank')
+  }
+
+  const handleDocs = () => {
+    window.open('https://supplychainsimulation.github.io/SupplyNetPy/getting-started/', '_blank')
+  }
+
+  const handleAbout = () => {
+    // Create a simple about dialog or navigate to about page
+    alert('SupplyNet Web v1.0\n\nBuilt with React and SupplyNetPy\n\nDeveloped by Divyansh Pandey')
+  }
 
   return (
     <Box
@@ -563,28 +589,43 @@ function ActionToolbar({
       >
         <MenuItem
           onClick={() => {
+            handleHelp()
             setHelpMenuAnchor(null)
-            onMenuClick('help')
           }}
         >
           <ListItemIcon>
             <HelpOutlineIcon fontSize="small" color="primary" />
           </ListItemIcon>
           <ListItemText primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 500 }}>
-            Help & Docs
+            Help & Support
           </ListItemText>
         </MenuItem>
+
         <MenuItem
           onClick={() => {
+            handleDocs()
             setHelpMenuAnchor(null)
-            onMenuClick('about')
+          }}
+        >
+          <ListItemIcon>
+            <DocsIcon fontSize="small" color="primary" />
+          </ListItemIcon>
+          <ListItemText primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 500 }}>
+            Documentation
+          </ListItemText>
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            handleAbout()
+            setHelpMenuAnchor(null)
           }}
         >
           <ListItemIcon>
             <InfoIcon fontSize="small" color="primary" />
           </ListItemIcon>
           <ListItemText primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 500 }}>
-            About
+            About SupplyNet Web
           </ListItemText>
         </MenuItem>
       </Menu>
@@ -670,7 +711,7 @@ function ActionToolbar({
         <MenuItem
           onClick={() => {
             setUserMenuAnchor(null)
-            onMenuClick('settings')
+            navigate('/profile')
           }}
           sx={{ py: 1.5 }}
         >
@@ -678,14 +719,14 @@ function ActionToolbar({
             <SettingsIcon fontSize="small" color="primary" />
           </ListItemIcon>
           <ListItemText primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 500 }}>
-            Settings
+            Profile Settings
           </ListItemText>
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
         <MenuItem
           onClick={() => {
             setUserMenuAnchor(null)
-            onMenuClick('logout')
+            handleLogout()
           }}
           sx={{ py: 1.5 }}
         >

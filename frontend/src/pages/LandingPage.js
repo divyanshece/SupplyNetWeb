@@ -409,6 +409,21 @@ const LandingPage = () => {
                       </Box>
                       <Divider />
                       <MenuItem
+                        onClick={() => {
+                          handleMenuClose()
+                          navigate('/profile')
+                        }}
+                        sx={{
+                          py: 1.5,
+                          '&:hover': { bgcolor: darkMode ? '#334155' : '#f8fafc' },
+                        }}
+                      >
+                        <ListItemIcon>
+                          <PersonIcon fontSize="small" sx={{ color: '#8b5cf6' }} />
+                        </ListItemIcon>
+                        <ListItemText>Profile Settings</ListItemText>
+                      </MenuItem>
+                      <MenuItem
                         onClick={handleGoToApp}
                         sx={{
                           py: 1.5,
@@ -1005,7 +1020,7 @@ const LandingPage = () => {
                     About Us
                   </Link>
                   <Link
-                    href="#"
+                    href="mailto:div.dev@zohomail.in"
                     color="inherit"
                     underline="hover"
                     sx={{

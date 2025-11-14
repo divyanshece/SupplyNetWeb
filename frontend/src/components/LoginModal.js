@@ -40,13 +40,12 @@ function LoginModal({ open, onClose, defaultTab = 'signin' }) {
 
   const handleGoogleSignIn = async () => {
     try {
-      // Store redirect path BEFORE starting OAuth
       const redirectPath = localStorage.getItem('redirectAfterLogin') || '/app'
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}${redirectPath}`,
         },
       })
 

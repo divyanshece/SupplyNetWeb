@@ -13,12 +13,10 @@ import { Box, Snackbar, Alert, Typography } from '@mui/material'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import { getTheme } from './theme/theme'
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
   useNavigate,
-  useSearchParams,
 } from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext'
 import { supabase } from './supabaseClient'
@@ -36,65 +34,48 @@ import ProtectedRoute from './components/ProtectedRoute'
 import SavedNetworksDialog from './components/SavedNetworksDialog'
 import WorkspaceStats from './components/WorkspaceStats'
 import ScenarioComparison from './components/ScenarioComparison'
+import PrivateRoute from "./components/PrivateRoute"
+
 
 // Pages
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import LandingPage from './pages/LandingPage'
 import ResetPassword from './pages/ResetPassword'
+import ProfilePage from './pages/ProfilePage'
 
 function AuthCallback() {
   const navigate = useNavigate()
-  const { user } = useAuth() // Use the auth context
-  const [status, setStatus] = useState('loading')
+  const { setUser } = useAuth()
+  
 
   useEffect(() => {
-    const handleCallback = async () => {
-      try {
-        // Wait a moment for Supabase to process the OAuth callback
-        await new Promise(resolve => setTimeout(resolve, 1500))
+    // Supabase automatically handles the OAuth hash fragments
+    // We just need to wait for the session to be established
+    const handleAuth = async () => {
+      // Wait for Supabase to process the hash
+      await new Promise(resolve => setTimeout(resolve, 2000))
 
-        // Check if user is now authenticated
-        const {
-          data: { session },
-          error,
-        } = await supabase.auth.getSession()
+      // Check if we have a session now
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
 
-        if (error) {
-          console.error('Session error:', error)
-          setStatus('error')
-          setTimeout(() => navigate('/'), 2000)
-          return
-        }
+      if (session) {
+        // Get redirect path
+        const redirectPath = localStorage.getItem('redirectAfterLogin') || '/app'
+        localStorage.removeItem('redirectAfterLogin')
 
-        if (session?.user) {
-          console.log('User authenticated:', session.user.email)
-          setStatus('success')
-
-          // Get redirect path
-          const redirectPath = localStorage.getItem('redirectAfterLogin') || '/app'
-          localStorage.removeItem('redirectAfterLogin')
-
-          console.log('Redirecting to:', redirectPath)
-
-          // Navigate after a brief delay
-          setTimeout(() => {
-            navigate(redirectPath, { replace: true })
-          }, 500)
-        } else {
-          console.log('No session found')
-          setStatus('error')
-          setTimeout(() => navigate('/'), 2000)
-        }
-      } catch (error) {
-        console.error('Callback error:', error)
-        setStatus('error')
-        setTimeout(() => navigate('/'), 2000)
+        // Navigate
+        window.location.href = redirectPath
+      } else {
+        // No session, go home
+        window.location.href = '/'
       }
     }
 
-    handleCallback()
-  }, [navigate])
+    handleAuth()
+  }, [])
 
   return (
     <Box
@@ -103,87 +84,10 @@ function AuthCallback() {
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: '100vh',
-        flexDirection: 'column',
-        gap: 2,
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       }}
     >
-      {status === 'loading' && (
-        <>
-          <Box
-            sx={{
-              width: 64,
-              height: 64,
-              borderRadius: '50%',
-              border: '4px solid rgba(255,255,255,0.2)',
-              borderTopColor: '#fff',
-              animation: 'spin 1s linear infinite',
-              '@keyframes spin': {
-                '0%': { transform: 'rotate(0deg)' },
-                '100%': { transform: 'rotate(360deg)' },
-              },
-            }}
-          />
-          <Typography variant="h6" sx={{ color: '#fff', fontWeight: 600 }}>
-            Signing you in with Google...
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
-            Please wait
-          </Typography>
-        </>
-      )}
-
-      {status === 'success' && (
-        <>
-          <Box
-            sx={{
-              width: 64,
-              height: 64,
-              borderRadius: '50%',
-              bgcolor: 'rgba(16, 185, 129, 0.2)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Typography variant="h3" sx={{ color: '#10b981' }}>
-              ✓
-            </Typography>
-          </Box>
-          <Typography variant="h6" sx={{ color: '#fff', fontWeight: 600 }}>
-            Success!
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
-            Redirecting...
-          </Typography>
-        </>
-      )}
-
-      {status === 'error' && (
-        <>
-          <Box
-            sx={{
-              width: 64,
-              height: 64,
-              borderRadius: '50%',
-              bgcolor: 'rgba(239, 68, 68, 0.2)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Typography variant="h3" sx={{ color: '#ef4444' }}>
-              ✕
-            </Typography>
-          </Box>
-          <Typography variant="h6" sx={{ color: '#fff', fontWeight: 600 }}>
-            Authentication Failed
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
-            Redirecting to home...
-          </Typography>
-        </>
-      )}
+      <Typography sx={{ color: '#fff' }}>Completing sign in...</Typography>
     </Box>
   )
 }
@@ -1286,7 +1190,9 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/auth/confirm" element={<AuthCallback />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />'
+      <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+
 
       {/* Main App - Protected */}
       <Route
