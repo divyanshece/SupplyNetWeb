@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   Box,
   Paper,
@@ -10,34 +10,39 @@ import {
   Divider,
   Alert,
   useTheme,
-} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+} from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
 
 function Login() {
-  const theme = useTheme();
-  const navigate = useNavigate();
-  const { signIn } = useAuth();
+  const theme = useTheme()
+  const navigate = useNavigate()
+  const { signIn } = useAuth()
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+  const handleSubmit = async e => {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
 
     try {
-      await signIn(email, password);
-      navigate('/');
+      await signIn(email, password)
+
+      // Get redirect path from localStorage
+      const redirectPath = localStorage.getItem('redirectAfterLogin') || '/app'
+      localStorage.removeItem('redirectAfterLogin') // Clean up
+
+      navigate(redirectPath)
     } catch (err) {
-      setError(err.message || 'Failed to sign in');
+      setError(err.message || 'Failed to sign in')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <Box
@@ -46,9 +51,10 @@ function Login() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: theme.palette.mode === 'light'
-          ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-          : 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+        background:
+          theme.palette.mode === 'light'
+            ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+            : 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
         p: 2,
       }}
     >
@@ -91,16 +97,17 @@ function Login() {
               label="Email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               fullWidth
               required
               autoFocus
             />
+
             <TextField
               label="Password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               fullWidth
               required
             />
@@ -153,7 +160,7 @@ function Login() {
         </form>
       </Paper>
     </Box>
-  );
+  )
 }
 
-export default Login;
+export default Login

@@ -37,9 +37,10 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import ThemeToggle from './ThemeToggle'
 import FactoryIcon from '@mui/icons-material/Factory'
-import InventoryIcon from '@mui/icons-material/Inventory';
-import PersonIcon from '@mui/icons-material/Person';
-import ClearIcon from '@mui/icons-material/Clear';
+import InventoryIcon from '@mui/icons-material/Inventory'
+import PersonIcon from '@mui/icons-material/Person'
+import ClearIcon from '@mui/icons-material/Clear'
+import { useNavigate } from 'react-router-dom'
 
 function ActionToolbar({
   onAddNode,
@@ -71,6 +72,7 @@ function ActionToolbar({
   const [analyzeMenuAnchor, setAnalyzeMenuAnchor] = React.useState(null)
   const [userMenuAnchor, setUserMenuAnchor] = React.useState(null)
   const [helpMenuAnchor, setHelpMenuAnchor] = React.useState(null)
+  const navigate = useNavigate()
 
   return (
     <Box
@@ -85,22 +87,35 @@ function ActionToolbar({
         transition: 'all 0.3s ease',
       }}
     >
-      {/* Logo */}
-      <Typography
-        variant="h6"
+      {/* Logo - Clickable */}
+      <Box
+        onClick={() => navigate('/')}
         sx={{
-          fontWeight: 700,
-          fontSize: '1.3rem',
-          letterSpacing: '-0.5px',
-          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          mr: 2,
-          transition: 'all 0.3s ease',
+          display: 'flex',
+          alignItems: 'center',
+          cursor: 'pointer',
+          transition: 'transform 0.3s ease',
+          '&:hover': {
+            transform: 'scale(1.05)',
+          },
         }}
       >
-        SupplyNet-Web
-      </Typography>
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 700,
+            fontSize: '1.3rem',
+            letterSpacing: '-0.5px',
+            background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            mr: 2,
+            transition: 'all 0.3s ease',
+          }}
+        >
+          SupplyNet Web
+        </Typography>
+      </Box>
 
       <Divider orientation="vertical" flexItem />
 

@@ -12,7 +12,7 @@ import 'reactflow/dist/style.css'
 import { Box, Snackbar, Alert } from '@mui/material'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import { getTheme } from './theme/theme'
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext'
 import { supabase } from './supabaseClient'
 
@@ -30,9 +30,12 @@ import SavedNetworksDialog from './components/SavedNetworksDialog'
 import WorkspaceStats from './components/WorkspaceStats'
 import ScenarioComparison from './components/ScenarioComparison'
 
+
+
 // Pages
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import LandingPage from './pages/LandingPage';
 
 
 function MainApp() {
@@ -820,7 +823,7 @@ function MainApp() {
       severity: 'warning',
       onConfirm: async () => {
         await signOut()
-        navigate('/login')
+        navigate('/')
       },
     })
   }
@@ -1126,19 +1129,27 @@ function MainApp() {
 function App() {
   return (
     <Routes>
+      {/* Landing Page - Public */}
+      <Route path="/" element={<LandingPage />} />
+      
+      {/* Auth Routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      
+      {/* Main App - Protected */}
       <Route
-        path="/"
+        path="/app"
         element={
           <ProtectedRoute>
             <MainApp />
           </ProtectedRoute>
         }
       />
+      
+      {/* Redirect unknown routes to landing */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  )
+  );
 }
 
-export default App
+export default App;
