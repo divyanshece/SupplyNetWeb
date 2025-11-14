@@ -12,7 +12,14 @@ import 'reactflow/dist/style.css'
 import { Box, Snackbar, Alert, Typography } from '@mui/material'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import { getTheme } from './theme/theme'
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext'
 import { supabase } from './supabaseClient'
 
@@ -34,43 +41,149 @@ import ScenarioComparison from './components/ScenarioComparison'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import LandingPage from './pages/LandingPage'
+import ResetPassword from './pages/ResetPassword'
 
 function AuthCallback() {
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const { supabase } = useAuth()
+  const { user } = useAuth() // Use the auth context
+  const [status, setStatus] = useState('loading')
 
   useEffect(() => {
     const handleCallback = async () => {
-      const token_hash = searchParams.get('token_hash')
-      const type = searchParams.get('type')
+      try {
+        // Wait a moment for Supabase to process the OAuth callback
+        await new Promise(resolve => setTimeout(resolve, 1500))
 
-      if (token_hash && type) {
-        const { error } = await supabase.auth.verifyOtp({
-          token_hash,
-          type,
-        })
+        // Check if user is now authenticated
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession()
 
         if (error) {
-          console.error('Error confirming email:', error)
-          navigate('/login?error=confirmation_failed')
-        } else {
-          // Successfully confirmed
-          navigate('/app?confirmed=true')
+          console.error('Session error:', error)
+          setStatus('error')
+          setTimeout(() => navigate('/'), 2000)
+          return
         }
-      } else {
-        navigate('/login')
+
+        if (session?.user) {
+          console.log('User authenticated:', session.user.email)
+          setStatus('success')
+
+          // Get redirect path
+          const redirectPath = localStorage.getItem('redirectAfterLogin') || '/app'
+          localStorage.removeItem('redirectAfterLogin')
+
+          console.log('Redirecting to:', redirectPath)
+
+          // Navigate after a brief delay
+          setTimeout(() => {
+            navigate(redirectPath, { replace: true })
+          }, 500)
+        } else {
+          console.log('No session found')
+          setStatus('error')
+          setTimeout(() => navigate('/'), 2000)
+        }
+      } catch (error) {
+        console.error('Callback error:', error)
+        setStatus('error')
+        setTimeout(() => navigate('/'), 2000)
       }
     }
 
     handleCallback()
-  }, [searchParams, navigate, supabase])
+  }, [navigate])
 
   return (
     <Box
-      sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        flexDirection: 'column',
+        gap: 2,
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      }}
     >
-      <Typography>Confirming your email...</Typography>
+      {status === 'loading' && (
+        <>
+          <Box
+            sx={{
+              width: 64,
+              height: 64,
+              borderRadius: '50%',
+              border: '4px solid rgba(255,255,255,0.2)',
+              borderTopColor: '#fff',
+              animation: 'spin 1s linear infinite',
+              '@keyframes spin': {
+                '0%': { transform: 'rotate(0deg)' },
+                '100%': { transform: 'rotate(360deg)' },
+              },
+            }}
+          />
+          <Typography variant="h6" sx={{ color: '#fff', fontWeight: 600 }}>
+            Signing you in with Google...
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+            Please wait
+          </Typography>
+        </>
+      )}
+
+      {status === 'success' && (
+        <>
+          <Box
+            sx={{
+              width: 64,
+              height: 64,
+              borderRadius: '50%',
+              bgcolor: 'rgba(16, 185, 129, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography variant="h3" sx={{ color: '#10b981' }}>
+              ✓
+            </Typography>
+          </Box>
+          <Typography variant="h6" sx={{ color: '#fff', fontWeight: 600 }}>
+            Success!
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+            Redirecting...
+          </Typography>
+        </>
+      )}
+
+      {status === 'error' && (
+        <>
+          <Box
+            sx={{
+              width: 64,
+              height: 64,
+              borderRadius: '50%',
+              bgcolor: 'rgba(239, 68, 68, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography variant="h3" sx={{ color: '#ef4444' }}>
+              ✕
+            </Typography>
+          </Box>
+          <Typography variant="h6" sx={{ color: '#fff', fontWeight: 600 }}>
+            Authentication Failed
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+            Redirecting to home...
+          </Typography>
+        </>
+      )}
     </Box>
   )
 }
@@ -1173,6 +1286,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/auth/confirm" element={<AuthCallback />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
 
       {/* Main App - Protected */}
       <Route

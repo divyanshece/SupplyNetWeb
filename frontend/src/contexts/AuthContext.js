@@ -32,18 +32,29 @@ export const AuthProvider = ({ children }) => {
     return () => subscription.unsubscribe()
   }, [])
 
-  const signUp = async (email, password) => {
+  const signUp = async (email, password, fullName) => {
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            full_name: fullName, // ← Store name in user metadata
+          },
+        },
       })
 
       if (error) {
-        // Customize error messages
-        if (error.message.includes('already registered') || error.status === 400) {
-          throw new Error('User already registered with this email')
+        const errorMsg = error.message?.toLowerCase() || ''
+
+        if (errorMsg.includes('already') || errorMsg.includes('exist')) {
+          throw new Error('User already registered')
         }
+
+        if (error.status === 422 || error.status === 400) {
+          throw new Error('User already registered')
+        }
+
         throw error
       }
 

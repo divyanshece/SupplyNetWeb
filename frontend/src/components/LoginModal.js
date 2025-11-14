@@ -17,21 +17,70 @@ import {
 import { Close as CloseIcon } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { supabase } from '../supabaseClient'
+import { Google as GoogleIcon } from '@mui/icons-material'
 
 function LoginModal({ open, onClose, defaultTab = 'signin' }) {
   const navigate = useNavigate()
   const { signIn, signUp } = useAuth()
-
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
+  const [resetEmail, setResetEmail] = useState('')
   const [currentTab, setCurrentTab] = useState(defaultTab)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [fullName, setFullName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const isValidEmail = email => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return emailRegex.test(email)
+  }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      // Store redirect path BEFORE starting OAuth
+      const redirectPath = localStorage.getItem('redirectAfterLogin') || '/app'
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      })
+
+      if (error) throw error
+    } catch (err) {
+      setError(err.message || 'Failed to sign in with Google')
+    }
+  }
+
+  const handleForgotPassword = async e => {
+    e.preventDefault()
+    setError('')
+    setSuccess('')
+    setLoading(true)
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      })
+
+      if (error) throw error
+
+      setSuccess('Password reset link sent! Check your email (including spam folder).')
+      setResetEmail('')
+
+      setTimeout(() => {
+        setShowForgotPassword(false)
+        setSuccess('')
+      }, 4000)
+    } catch (err) {
+      setError(err.message || 'Failed to send reset email')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleTabChange = (event, newValue) => {
@@ -67,13 +116,6 @@ function LoginModal({ open, onClose, defaultTab = 'signin' }) {
     setSuccess('')
     setLoading(true)
 
-    // Validate email format
-    if (!isValidEmail(email)) {
-      setError('Please enter a valid email address')
-      setLoading(false)
-      return
-    }
-
     if (password !== confirmPassword) {
       setError('Passwords do not match')
       setLoading(false)
@@ -87,46 +129,30 @@ function LoginModal({ open, onClose, defaultTab = 'signin' }) {
     }
 
     try {
-      await signUp(email, password)
+      // Pass name to signUp function
+      await signUp(email, password, fullName)
+
       setSuccess('Account created! Please check your email to verify your account.')
       setEmail('')
       setPassword('')
       setConfirmPassword('')
+      setFullName('') // ← Clear name
 
-      // Switch to sign in tab after 2 seconds
       setTimeout(() => {
         setCurrentTab('signin')
         setSuccess('')
       }, 2000)
     } catch (err) {
-      // Handle specific error messages
-      let errorMessage = 'Failed to sign up'
-
-      if (err.message) {
-        const msg = err.message.toLowerCase()
-
-        if (
-          msg.includes('already registered') ||
-          msg.includes('already exists') ||
-          msg.includes('user already registered')
-        ) {
-          errorMessage = 'This email is already registered. Please sign in instead.'
-          // Auto-switch to sign in tab after 2 seconds
-          setTimeout(() => {
-            setCurrentTab('signin')
-            setError('')
-          }, 2500)
-        } else if (msg.includes('invalid email')) {
-          errorMessage = 'Please enter a valid email address'
-        } else if (msg.includes('weak password') || msg.includes('password')) {
-          errorMessage =
-            'Password is too weak. Use at least 6 characters with a mix of letters and numbers.'
-        } else {
-          errorMessage = err.message
-        }
+      if (err.message === 'User already registered') {
+        setError('This email is already registered. Please sign in instead.')
+        setTimeout(() => {
+          setCurrentTab('signin')
+          setError('')
+          setEmail(email)
+        }, 2500)
+      } else {
+        setError(err.message || 'Failed to sign up. Please try again.')
       }
-
-      setError(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -228,6 +254,28 @@ function LoginModal({ open, onClose, defaultTab = 'signin' }) {
               />
 
               <Button
+                variant="outlined"
+                fullWidth
+                onClick={handleGoogleSignIn}
+                startIcon={<GoogleIcon />}
+                sx={{
+                  py: 1.5,
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  borderColor: '#4285f4',
+                  color: '#4285f4',
+                  '&:hover': {
+                    borderColor: '#357ae8',
+                    bgcolor: 'rgba(66, 133, 244, 0.04)',
+                  },
+                }}
+              >
+                Continue with Google
+              </Button>
+
+              <Divider sx={{ my: 2 }}>OR</Divider>
+
+              <Button
                 type="submit"
                 variant="contained"
                 fullWidth
@@ -247,13 +295,14 @@ function LoginModal({ open, onClose, defaultTab = 'signin' }) {
                 href="#"
                 onClick={e => {
                   e.preventDefault()
-                  // Add forgot password logic
+                  setShowForgotPassword(true)
                 }}
                 sx={{
                   textAlign: 'center',
                   fontSize: '0.875rem',
                   color: 'primary.main',
                   textDecoration: 'none',
+                  cursor: 'pointer',
                   '&:hover': { textDecoration: 'underline' },
                 }}
               >
@@ -264,6 +313,16 @@ function LoginModal({ open, onClose, defaultTab = 'signin' }) {
         ) : (
           <form onSubmit={handleSignUp}>
             <Stack spacing={2.5}>
+              <TextField
+                label="Full Name"
+                type="text"
+                value={fullName}
+                onChange={e => setFullName(e.target.value)}
+                fullWidth
+                required
+                autoFocus
+              />
+
               <TextField
                 label="Email"
                 type="email"
@@ -310,6 +369,54 @@ function LoginModal({ open, onClose, defaultTab = 'signin' }) {
               </Button>
             </Stack>
           </form>
+        )}
+        {showForgotPassword && (
+          <Box sx={{ mt: 3, pt: 3, borderTop: '1px solid', borderColor: 'divider' }}>
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+              Reset Password
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Enter your email address and we'll send you a link to reset your password.
+            </Typography>
+
+            <form onSubmit={handleForgotPassword}>
+              <Stack spacing={2}>
+                <TextField
+                  label="Email"
+                  type="email"
+                  value={resetEmail}
+                  onChange={e => setResetEmail(e.target.value)}
+                  fullWidth
+                  required
+                  autoFocus
+                />
+
+                <Button
+                  type="submit"
+                  variant="contained"
+                  fullWidth
+                  disabled={loading}
+                  sx={{
+                    py: 1.5,
+                    fontWeight: 600,
+                    textTransform: 'none',
+                    background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                  }}
+                >
+                  {loading ? 'Sending...' : 'Send Reset Link'}
+                </Button>
+
+                <Button
+                  variant="text"
+                  fullWidth
+                  onClick={() => setShowForgotPassword(false)}
+                  sx={{ textTransform: 'none' }}
+                >
+                  Back to Sign In
+                </Button>
+              </Stack>
+            </form>
+          </Box>
         )}
       </DialogContent>
     </Dialog>

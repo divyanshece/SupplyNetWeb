@@ -341,24 +341,36 @@ const LandingPage = () => {
                         border: '2px solid',
                         borderColor: '#3b82f6',
                         transition: 'all 0.3s ease',
+                        padding: 0,
                         '&:hover': {
                           transform: 'scale(1.1)',
                           borderColor: '#8b5cf6',
                         },
                       }}
                     >
-                      <Avatar
-                        sx={{
-                          width: 32,
-                          height: 32,
-                          background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
-                          fontSize: '0.875rem',
-                          fontWeight: 700,
-                          color: '#fff',
-                        }}
-                      >
-                        {user.email?.charAt(0).toUpperCase()}
-                      </Avatar>
+                      {user?.user_metadata?.avatar_url ? (
+                        <Avatar
+                          src={user.user_metadata.avatar_url}
+                          sx={{
+                            width: 36,
+                            height: 36,
+                          }}
+                        />
+                      ) : (
+                        <Avatar
+                          sx={{
+                            width: 36,
+                            height: 36,
+                            background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                            fontSize: '0.875rem',
+                            fontWeight: 700,
+                            color: '#fff',
+                          }}
+                        >
+                          {user?.user_metadata?.full_name?.charAt(0).toUpperCase() ||
+                            user?.email?.charAt(0).toUpperCase()}
+                        </Avatar>
+                      )}
                     </IconButton>
 
                     <Menu
@@ -383,13 +395,16 @@ const LandingPage = () => {
                           fontWeight={600}
                           sx={{ color: darkMode ? '#fff' : '#0f172a' }}
                         >
-                          {user.user_metadata?.full_name || user.email?.split('@')[0]}
+                          {user?.user_metadata?.full_name ||
+                            user?.user_metadata?.name ||
+                            user?.email?.split('@')[0] ||
+                            'User'}
                         </Typography>
                         <Typography
                           variant="caption"
                           sx={{ color: darkMode ? '#94a3b8' : '#64748b' }}
                         >
-                          {user.email}
+                          {user?.email}
                         </Typography>
                       </Box>
                       <Divider />
