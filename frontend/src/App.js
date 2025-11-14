@@ -12,7 +12,7 @@ import 'reactflow/dist/style.css'
 import { Box, Snackbar, Alert, Typography } from '@mui/material'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import { getTheme } from './theme/theme'
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext'
 import { supabase } from './supabaseClient'
 
@@ -30,13 +30,10 @@ import SavedNetworksDialog from './components/SavedNetworksDialog'
 import WorkspaceStats from './components/WorkspaceStats'
 import ScenarioComparison from './components/ScenarioComparison'
 
-
-
-
 // Pages
 import Login from './pages/Login'
 import Signup from './pages/Signup'
-import LandingPage from './pages/LandingPage';
+import LandingPage from './pages/LandingPage'
 
 function AuthCallback() {
   const navigate = useNavigate()
@@ -70,18 +67,19 @@ function AuthCallback() {
   }, [searchParams, navigate, supabase])
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+    <Box
+      sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}
+    >
       <Typography>Confirming your email...</Typography>
     </Box>
   )
 }
 
-
 function MainApp() {
   const navigate = useNavigate()
   const { user, signOut } = useAuth()
 
-  // Theme
+  // Theme - Keep your existing system
   const [themeMode, setThemeMode] = useState(() => {
     const savedMode = localStorage.getItem('themeMode')
     return savedMode || 'light'
@@ -1170,12 +1168,12 @@ function App() {
     <Routes>
       {/* Landing Page - Public */}
       <Route path="/" element={<LandingPage />} />
-      
+
       {/* Auth Routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/auth/confirm" element={<AuthCallback />} />
-      
+
       {/* Main App - Protected */}
       <Route
         path="/app"
@@ -1185,11 +1183,11 @@ function App() {
           </ProtectedRoute>
         }
       />
-      
+
       {/* Redirect unknown routes to landing */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  );
+  )
 }
 
-export default App;
+export default App

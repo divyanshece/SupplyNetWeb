@@ -42,15 +42,27 @@ import {
 } from '@mui/icons-material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-
 const LandingPage = () => {
   const navigate = useNavigate()
-  const [darkMode, setDarkMode] = useState(false)
+  const [themeMode, setThemeMode] = useState(() => {
+    const savedMode = localStorage.getItem('themeMode')
+    return savedMode || 'light'
+  })
+  const darkMode = themeMode === 'dark'
+
   const { user, signOut } = useAuth() // ← Add this
   const [anchorEl, setAnchorEl] = useState(null)
   const menuOpen = Boolean(anchorEl)
   const [loginModalOpen, setLoginModalOpen] = useState(false)
   const [loginModalTab, setLoginModalTab] = useState('signin')
+
+  useEffect(() => {
+    localStorage.setItem('themeMode', themeMode)
+  }, [themeMode])
+
+  const toggleTheme = () => {
+    setThemeMode(prevMode => (prevMode === 'light' ? 'dark' : 'light'))
+  }
 
   const handleMenuOpen = event => {
     setAnchorEl(event.currentTarget)
@@ -61,20 +73,20 @@ const LandingPage = () => {
   }
 
   const handleLogout = async () => {
-  try {
-    await signOut()
-    handleMenuClose()
-    
-    // Force navigation after logout
-    window.location.href = '/'
-  } catch (error) {
-    console.error('Logout error:', error)
-    // Force cleanup and redirect anyway
-    localStorage.clear()
-    sessionStorage.clear()
-    window.location.href = '/'
+    try {
+      await signOut()
+      handleMenuClose()
+
+      // Force navigation after logout
+      window.location.href = '/'
+    } catch (error) {
+      console.error('Logout error:', error)
+      // Force cleanup and redirect anyway
+      localStorage.clear()
+      sessionStorage.clear()
+      window.location.href = '/'
+    }
   }
-}
 
   const handleGoToApp = () => {
     handleMenuClose()
@@ -305,7 +317,7 @@ const LandingPage = () => {
                 </Stack>
 
                 <IconButton
-                  onClick={() => setDarkMode(!darkMode)}
+                  onClick={toggleTheme}
                   sx={{
                     bgcolor: darkMode ? '#1e293b' : '#f1f5f9',
                     color: darkMode ? '#fbbf24' : '#3b82f6',

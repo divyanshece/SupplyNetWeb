@@ -14,8 +14,8 @@ import {
   Avatar,
   Stack,
   useTheme,
-  AccountTree as NetworkIcon,
 } from '@mui/material'
+import { AccountTree as NetworkIcon } from '@mui/icons-material'
 import AddIcon from '@mui/icons-material/Add'
 import StorefrontIcon from '@mui/icons-material/Storefront'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
@@ -42,7 +42,6 @@ import InventoryIcon from '@mui/icons-material/Inventory'
 import PersonIcon from '@mui/icons-material/Person'
 import ClearIcon from '@mui/icons-material/Clear'
 import { useNavigate } from 'react-router-dom'
-
 
 function ActionToolbar({
   onAddNode,
@@ -89,6 +88,22 @@ function ActionToolbar({
         transition: 'all 0.3s ease',
       }}
     >
+      <Box
+        sx={{
+          width: 36,
+          height: 36,
+          borderRadius: 1.5,
+          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          mr: 1.5,
+          boxShadow: `0 2px 8px ${theme.palette.primary.main}40`,
+        }}
+      >
+        <NetworkIcon sx={{ fontSize: 22, color: 'white' }} />
+      </Box>
+
       {/* Logo - Clickable */}
       <Box
         onClick={() => navigate('/')}
@@ -671,7 +686,6 @@ function ActionToolbar({
           onClick={() => {
             setUserMenuAnchor(null)
             onMenuClick('logout')
-            
           }}
           sx={{ py: 1.5 }}
         >

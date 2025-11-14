@@ -65,36 +65,43 @@ export const AuthProvider = ({ children }) => {
 
   const signOut = async () => {
     try {
-      // Try graceful logout first
-      try {
-        await supabase.auth.signOut({ scope: 'local' })
-      } catch (supabaseError) {
-        console.warn('Supabase logout failed, forcing local cleanup:', supabaseError)
+      // Save theme preference before clearing
+      const themePreference = localStorage.getItem('themeMode')
+
+      // Sign out from Supabase
+      const { error } = await supabase.auth.signOut({ scope: 'local' })
+
+      if (error) {
+        console.error('Supabase signout error:', error)
       }
 
-      // Force complete cleanup
-      localStorage.removeItem('supabase.auth.token')
-      localStorage.removeItem('redirectAfterLogin')
+      // Clear all storage
       localStorage.clear()
       sessionStorage.clear()
 
-      // Clear cookies (if any)
-      document.cookie.split(';').forEach(c => {
-        document.cookie = c
-          .replace(/^ +/, '')
-          .replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/')
-      })
+      // Restore theme preference
+      if (themePreference) {
+        localStorage.setItem('themeMode', themePreference)
+      }
 
-      // Set user to null
+      // Force set user to null
       setUser(null)
 
       return { success: true }
     } catch (error) {
-      console.error('Critical logout error:', error)
+      console.error('Error signing out:', error)
 
-      // Last resort - force everything
+      // Save theme before force cleanup
+      const themePreference = localStorage.getItem('themeMode')
+
       localStorage.clear()
       sessionStorage.clear()
+
+      // Restore theme
+      if (themePreference) {
+        localStorage.setItem('themeMode', themePreference)
+      }
+
       setUser(null)
 
       return { success: false, error }
