@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo, useSearchParams } from 'react'
+import React, { useState, useCallback, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import ReactFlow, {
   addEdge,
@@ -12,7 +12,7 @@ import 'reactflow/dist/style.css'
 import { Box, Snackbar, Alert, Typography } from '@mui/material'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import { getTheme } from './theme/theme'
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext'
 import { supabase } from './supabaseClient'
 
