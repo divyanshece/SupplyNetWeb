@@ -711,43 +711,80 @@ function MainApp() {
 
   // Simulation
   const runSimulation = async () => {
-    setIsSimulating(true)
-    try {
-      console.log('Starting simulation...')
-
-      const response = await axios.post(`${API_BASE_URL}/simulate`, {
-        // ← Changed from /api/simulate
-        nodes: nodes,
-        links: edges,
-        demands: demands,
-        sim_time: simTime,
-      })
-
-      console.log('Simulation response:', response.data)
-      console.log('Inventory data:', response.data.inventory_data) // ← ADD THIS
-      console.log('Inventory data keys:', Object.keys(response.data.inventory_data || {})) // ← ADD THIS
-
-      if (response.data.success) {
-        setSimulationResults(response.data)
-        setSnackbar({
-          open: true,
-          message: 'Simulation completed successfully!',
-          severity: 'success',
-        })
-      } else {
-        throw new Error(response.data.error || 'Simulation failed')
-      }
-    } catch (error) {
-      console.error('Simulation error:', error)
+  setIsSimulating(true)
+  
+  try {
+    // Step 1: Auto-validate network
+    console.log('Validating network before simulation...')
+    const validation = validateNetwork(nodes, edges, demands)
+    
+    // Step 2: Check if validation passed (no errors)
+    if (!validation.isValid) {
+      // Show validation dialog with errors
+      setValidationResults(validation)
+      setShowValidation(true)
+      
+      const errorCount = validation.errors.length
       setSnackbar({
         open: true,
-        message: `Simulation failed: ${error.response?.data?.detail || error.message}`,
+        message: `Cannot run simulation: ${errorCount} error(s) must be fixed first`,
         severity: 'error',
       })
-    } finally {
+      
       setIsSimulating(false)
+      return // STOP - don't run simulation
     }
+    
+    // Step 3: Show warnings if any (but continue)
+    if (validation.hasWarnings) {
+      console.warn('Network has warnings:', validation.warnings)
+      
+      // Optionally show warnings but still proceed
+      setSnackbar({
+        open: true,
+        message: `Running simulation with ${validation.warnings.length} warning(s)`,
+        severity: 'warning',
+      })
+      
+      // Small delay to let user see the warning
+      await new Promise(resolve => setTimeout(resolve, 1500))
+    }
+    
+    // Step 4: Validation passed - run simulation
+    console.log('Validation passed ✅, starting simulation...')
+
+    const response = await axios.post(`${API_BASE_URL}/simulate`, {
+      nodes: nodes,
+      links: edges,
+      demands: demands,
+      sim_time: simTime,
+    })
+
+    console.log('Simulation response:', response.data)
+    console.log('Inventory data:', response.data.inventory_data)
+    console.log('Inventory data keys:', Object.keys(response.data.inventory_data || {}))
+
+    if (response.data.success) {
+      setSimulationResults(response.data)
+      setSnackbar({
+        open: true,
+        message: '✅ Simulation completed successfully!',
+        severity: 'success',
+      })
+    } else {
+      throw new Error(response.data.error || 'Simulation failed')
+    }
+  } catch (error) {
+    console.error('Simulation error:', error)
+    setSnackbar({
+      open: true,
+      message: `Simulation failed: ${error.response?.data?.detail || error.message}`,
+      severity: 'error',
+    })
+  } finally {
+    setIsSimulating(false)
   }
+}
 
   const runValidation = () => {
     const results = validateNetwork(nodes, edges, demands)
